@@ -95,7 +95,6 @@ class HlsQualitySelectorPlugin {
    */
   getQualityMenuItem(item) {
     const player = this.player;
-    
     return new ConcreteMenuItem(player, item, this._qualityButton, this);
   }
 
@@ -103,21 +102,18 @@ class HlsQualitySelectorPlugin {
    * Executed when a quality level is added from HLS playlist.
    */
 
-  selectLevel(height){
-    if(height > 700){
+  selectLevel(height) {
+    if (height > 700) {
       return 'HD';
-    }else if(height > 400 && height < 700){
+    } else if (height > 400 && height < 700){
       return 'High';
-    }else if(height > 300 && height < 400){
+    } else if (height > 300 && height < 400){
       return 'Med';
-    }else if(height < 300){
+    } else if (height < 300){
       return 'Low';
-    }else{
-      return height + 'p'; 
     }
   }
   onAddQualityLevel() {
-
     const player = this.player;
     const qualityList = player.qualityLevels();
     const levels = qualityList.levels_ || [];
