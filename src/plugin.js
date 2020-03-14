@@ -95,26 +95,42 @@ class HlsQualitySelectorPlugin {
    */
   getQualityMenuItem(item) {
     const player = this.player;
-
+    
     return new ConcreteMenuItem(player, item, this._qualityButton, this);
   }
 
   /**
    * Executed when a quality level is added from HLS playlist.
    */
+
+  selectLevel(height){
+    if(height > 700){
+      return 'HD';
+    }else if(height > 400 && height < 700){
+      return 'High';
+    }else if(height > 300 && height < 400){
+      return 'Med';
+    }else if(height < 300){
+      return 'Low';
+    }else{
+      return height + 'p'; 
+    }
+  }
   onAddQualityLevel() {
 
     const player = this.player;
     const qualityList = player.qualityLevels();
     const levels = qualityList.levels_ || [];
     const levelItems = [];
-
+    
     for (let i = 0; i < levels.length; ++i) {
       if (!levelItems.filter(_existingItem => {
         return _existingItem.item && _existingItem.item.value === levels[i].height;
       }).length) {
+
         const levelItem = this.getQualityMenuItem.call(this, {
-          label: levels[i].height + 'p',
+          // label: levels[i].height + 'p',
+          label: this.selectLevel(levels[i].height),
           value: levels[i].height
         });
 
@@ -159,7 +175,8 @@ class HlsQualitySelectorPlugin {
     const qualityList = this.player.qualityLevels();
 
     if (this.config.displayCurrentQuality) {
-      this.setButtonInnerText(height === 'auto' ? height : `${height}p`);
+      let level = this.selectLevel(height)
+      this.setButtonInnerText(height === 'auto' ? height : level);
     }
 
     for (let i = 0; i < qualityList.length; ++i) {
